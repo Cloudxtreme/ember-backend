@@ -1,0 +1,8 @@
+
+ember.route.video         : /video/:id
+ember.route.popular       : /popular
+ember.route.search        : /search
+ember.route.about         : /about
+
+
+ember.router.video      :

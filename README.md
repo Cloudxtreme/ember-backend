@@ -1,7 +1,8 @@
 # Ember-backend
 
-This README outlines the details of collaborating on this Ember application.
-A short introduction of this app could easily go here.
+This module is intended to render the Ember applications on the server, without using any prerendering engine,
+such as PhantomJS or other. What we're trying to achieve is to create a wrapper using `Total.js` framework,
+that executes the exact same ember templates and other logic related code.
 
 ## Prerequisites
 
@@ -11,19 +12,22 @@ You will need the following things properly installed on your computer.
 * [Node.js](http://nodejs.org/) (with NPM)
 * [Bower](http://bower.io/)
 * [Ember CLI](http://www.ember-cli.com/)
-* [PhantomJS](http://phantomjs.org/)
+* [PhantomJS](http://phantomjs.org/) (for testing)
+* [Total.js](https://www.totaljs.com/)
 
 ## Installation
 
-* `git clone <repository-url>` this repository
-* change into the new directory
+* `git clone https://github.com/Polyzor/ember-backend.git ./ember-backend` this repository
+* `cd ember-backend`
 * `npm install`
 * `bower install`
 
 ## Running / Development
 
 * `ember server`
-* Visit your app at [http://localhost:4200](http://localhost:4200).
+* `node ember-backend/debug.js` (in another terminal)
+* Visit your app at (Ember) [http://localhost:4200](http://localhost:4200).
+* Visit your app at (Total) [http://localhost:4201](http://localhost:4201).
 
 ### Code Generators
 
