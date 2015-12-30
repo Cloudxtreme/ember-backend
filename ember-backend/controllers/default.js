@@ -10,7 +10,7 @@ function view_index() {
 
   var view = emberRouter.getView();
 
-
+  framework.global.emberView = 'index';
 
 
 	self.view(view);

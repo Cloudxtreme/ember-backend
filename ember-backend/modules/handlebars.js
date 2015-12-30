@@ -51,9 +51,60 @@ Handlebars.registerHelper('action', function(options) {
 
 
 Handlebars.registerHelper('content-for', function(options){
-  return ''
+
+  // TODO: create a more elegant way of handling "content-for" hooks rather than replace them
+  // this functionality is just a mockup, the actual logic is hardcodded inside /modules/controller.js
+  // index = index.replace("{{content-for 'body'}}", layout);
+
+  var content = '';
+
+  switch (options){
+    case 'head':
+      break;
+    case 'head-footer':
+      break;
+    case 'body':
+      break;
+    case 'body-footer':
+      break;
+  }
+
+  return new Handlebars.SafeString(content);
+
 });
 
+
+Handlebars.registerHelper('link-to', function (route, param, options) {
+  var href = (route === 'index') ? '/' : '/' + route.replace('.', '/');
+
+  var text = '';
+  var self = this;
+  self.attrs = [];
+
+  if (options){
+    // When: {{#link-to 'route' 'param'}}
+    text = options.fn(this);
+    href = U.concat(href, '/', param);
+
+    buildAttrs(options.hash);
+  }else{
+    // When: {{#link-to 'route'}}
+    text = param.fn(this);
+    buildAttrs(param.hash);
+  }
+
+  function buildAttrs(hash){
+    if (!Object.keys(hash).length) return;
+    for (var attr in hash){
+      attr = U.concat(Handlebars.escapeExpression(attr), '=', '"', Handlebars.escapeExpression(hash[attr]), '"');
+      self.attrs.push(attr);
+    }
+  }
+
+  var link = '<a href="' + href + '" '+ self.attrs.join(' ') +'>'+ text +'</a>';
+  return new Handlebars.SafeString(link);
+
+});
 
 exports.name = 'handlebars';
 exports.version = '1.00';

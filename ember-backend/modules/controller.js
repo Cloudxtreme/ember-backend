@@ -16,6 +16,10 @@ var definition = (function () {
   };
 
 
+  FrameworkPath.prototype.emberTemplates = function(filename) {
+    return path.join(framework.path.root(), 'app', 'templates', filename);
+  };
+
 
 
   /*
@@ -28,6 +32,9 @@ var definition = (function () {
 
     // Get Ember's index.html content
     var index = fs.readFileSync(framework.path.root('app/index.html')).toString('utf8');
+    var layout = fs.readFileSync(framework.path.emberTemplates('application.hbs').toString('utf8'));
+    index = index.replace("{{content-for 'body'}}", layout);
+
 
 
     // Check if cache exists
