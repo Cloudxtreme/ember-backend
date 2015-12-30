@@ -73,6 +73,22 @@ Handlebars.registerHelper('content-for', function(options){
 
 });
 
+//Handlebars.registerHelper('outlet', function(){
+//  var name = framework.global.emberView;
+//  var filename = U.concat(name, '.hbs');
+//
+//  var view = fs.readFileSync(framework.path.emberTemplates(filename).toString('utf8'));
+//
+//  var key = 'handlebars_' + name;
+//  var fn = framework.cache.read(key);
+//
+//  //console.log(Handlebars.precompile(view));
+//  //fn = Handlebars.compile(view, 'undefined');
+//
+//  //console.log(fn());
+//
+//  return '';
+//});
 
 Handlebars.registerHelper('link-to', function (route, param, options) {
   var href = (route === 'index') ? '/' : '/' + route.replace('.', '/');

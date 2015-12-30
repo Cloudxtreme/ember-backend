@@ -10,10 +10,13 @@ function view_index() {
 
   var view = emberRouter.getView();
 
-  framework.global.emberView = 'index';
-
-
-	self.view(view);
+  MODULE('api').query('post', {}, function (err, result) {
+    if (err) {
+      self.view('error', {error: err})
+    } else {
+      self.view(view, {model: result.posts});
+    }
+  });
 }
 
 

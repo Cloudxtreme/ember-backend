@@ -27,14 +27,17 @@ var definition = (function () {
    */
   Controller.prototype.view = function (name, model, headers, isPartial) {
     var self = this;
-
+    var filename = U.concat(name, '.hbs');
 
 
     // Get Ember's index.html content
     var index = fs.readFileSync(framework.path.root('app/index.html')).toString('utf8');
-    var layout = fs.readFileSync(framework.path.emberTemplates('application.hbs').toString('utf8'));
-    index = index.replace("{{content-for 'body'}}", layout);
+    var layout = fs.readFileSync(framework.path.emberTemplates('application.hbs')).toString('utf8');
 
+    // Render apropriate template
+    var template = fs.readFileSync(framework.path.emberTemplates(filename)).toString('utf8');
+    layout = layout.replace('{{outlet}}', template);
+    var view = index.replace("{{content-for 'body'}}", layout);
 
 
     // Check if cache exists
@@ -44,7 +47,7 @@ var definition = (function () {
 
 
     // Compile index.html
-    fn = Handlebars.compile(index, options);
+    fn = Handlebars.compile(view, options);
 
 
 
