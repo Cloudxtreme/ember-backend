@@ -1,0 +1,3 @@
+
+ember.test.route.post            : /post/0
+ember.test.route.post.edit       : /post/edit/0

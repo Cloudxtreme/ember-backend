@@ -1,0 +1,2 @@
+ember.adapter.host          : http://localhost:4200
+ember.adapter.namespace     : /api/v1

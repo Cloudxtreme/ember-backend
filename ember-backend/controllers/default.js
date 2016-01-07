@@ -1,22 +1,31 @@
 exports.install = function() {
-	F.route('/*', view_index);
+	F.route('/*', view, ['#EmberRouter', '#TestUnit']);
 };
 
-function view_index() {
+function view() {
 	var self = this;
-  var request = self.req;
 
-  var emberRouter = new U.EmberRouter(request);
+  var template  = self.repository.ember.template;
+  var method    = self.repository.ember.method;
+  var model     = self.repository.ember.model;
+  var by        = self.repository.ember.by;
+  var query     = self.repository.ember.query;
 
-  var view = emberRouter.getView();
-
-  MODULE('api').query('post', {}, function (err, result) {
-    if (err) {
-      self.view('error', {error: err})
-    } else {
-      self.view(view, {model: result.posts});
-    }
+  MODULE('store').store(method, model, by, query).then(function(error, response){
+    console.log("\n");
+    console.log("Response:", response);
+    self.view(template);
   });
+
+
+
+  //MODULE('store').store(store, model, by, {}, function (err, result) {
+  //  if (err) {
+  //    self.view('error', {error: err})
+  //  } else {
+  //    self.view(template, {model: result});
+  //  }
+  //});
 }
 
 

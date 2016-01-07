@@ -1,8 +1,16 @@
-
-ember.route.video         : /video/:id
-ember.route.popular       : /popular
-ember.route.search        : /search
-ember.route.about         : /about
+ember.adapter.host          : http://vidler.io
+ember.adapter.namespace     : /api/v1
 
 
-ember.router.video      :
+ember.route.index           : /
+ember.model.index           : post
+ember.store.index           : query
+
+
+ember.route.post            : /post/:id
+ember.model.post            : ["post"]
+ember.store.post            : ["findRecord"]
+
+
+ember.route.post.edit       : /post/edit/:id
+ember.model.post.edit       : post

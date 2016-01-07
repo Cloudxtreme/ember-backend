@@ -30,9 +30,17 @@ var definition = (function () {
     var filename = U.concat(name, '.hbs');
 
 
+    // Check if file exists under passed name, if not, try the subfolder version Ex: /post/index.hbs
+    //filename = (fs.existsSync(framework.path.emberTemplates(filename))) ? filename : U.concat(name, '/index.hbs');
+
+
+    // TODO Check again if file exists and send 404 if not
+
+
     // Get Ember's index.html content
     var index = fs.readFileSync(framework.path.root('app/index.html')).toString('utf8');
     var layout = fs.readFileSync(framework.path.emberTemplates('application.hbs')).toString('utf8');
+
 
     // Render apropriate template
     var template = fs.readFileSync(framework.path.emberTemplates(filename)).toString('utf8');
@@ -45,10 +53,8 @@ var definition = (function () {
     var fn = framework.cache.read(key);
 
 
-
     // Compile index.html
     fn = Handlebars.compile(view, options);
-
 
 
     // Return a response
