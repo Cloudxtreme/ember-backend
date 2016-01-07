@@ -12,9 +12,7 @@ function view() {
   var query     = self.repository.ember.query;
 
   MODULE('store').store(method, model, by, query).then(function(error, response){
-    console.log("\n");
-    console.log("Response:", response);
-    self.view(template);
+    self.view(template, {model: response});
   });
 
 

@@ -30,35 +30,39 @@ exports.store = function(method, modelName, id, query){
   };
 
 
-    /**
-     * @method _buildURL
-     * @param modelName
-     * @param id
-     * @returns {String} url
-     * @private
-     */
-  var _buildURL = function(modelName, id){
+  /**
+   * @method _buildURL
+   * @param modelName
+   * @param id
+   * @returns {String} url
+   * @private
+   */
+  var _buildURL = function (modelName, id) {
     var url = [];
     var host = self.host;
     var path;
-    var prefix = self.namespace;
+    var namespace = self.namespace;
 
-    if (host){
+    if (host) {
       url.push(host);
     }
 
-    if (prefix){
-      url.push(prefix);
+    if (namespace) {
+      url.push(namespace);
     }
 
-    if (modelName){
+    if (modelName) {
       path = pathForType(modelName);
-      if (path) { url.push(path); }
+      if (path) {
+        url.push(path);
+      }
     }
 
-    if (id){ url.push(encodeURIComponent(id)); }
+    if (id) {
+      url.push(encodeURIComponent(id));
+    }
 
-    url = url.join('');
+    url = url.join('/');
     if (!host && url && url.charAt(0) !== '/') {
       url = '/' + url;
     }
@@ -75,25 +79,19 @@ exports.store = function(method, modelName, id, query){
      */
   var pathForType = function(modelName){
     var path = pluralize(modelName);
-    path = (path.charAt(0) === '/') ? path : '/' + path;
+    //path = (path.charAt(0) === '/') ? path : '/' + path;
     return path;
   };
 
 
 
-  var request = function(url, options){
+  var request = function(url, options, callback){
     if (!options.url) {options.url = url}
     if (options){ options = requestOptions(url, options); }
 
-    var response = null;
-
-    console.log('before request');
     req(options, function (error, response, body) {
-      console.log('in request');
-      response = handleResponse(error, response, body);
+      return handleResponse(error, response, body, callback);
     });
-    console.log('after request');
-    return response;
   };
 
 
@@ -126,9 +124,10 @@ exports.store = function(method, modelName, id, query){
    * @param error
    * @param response
    * @param body
+   * @param callback
    * @returns {*}
      */
-  var handleResponse = function(error, response, body){
+  var handleResponse = function(error, response, body, callback){
     if (error){
       // TODO Handle request error
       console.log('Request Failed', error);
@@ -136,7 +135,7 @@ exports.store = function(method, modelName, id, query){
       // TODO Handler server error
       console.log('API Server failed');
     }else{
-      return body;
+      callback(error, body);
     }
   };
 
@@ -147,19 +146,49 @@ exports.store = function(method, modelName, id, query){
    * @param callback
      */
   self.then = function(callback){
+    var url, options;
 
-    var url = buildURL(method, modelName, id, query);
-    var options = requestOptions(url);
+    // Check if the view requests more than one model
+    if ( (method && modelName) instanceof Array){
+      var error = null;
+      var response = {};
 
-    var response = request(url, options);
+      var index = 0;
+      var len = method.length;
+      method.forEach(function(method){
+        var model = modelName[index];
 
-    console.log( response);
+        url = buildURL(method, model, id, query);
+        options = requestOptions(url);
 
-    var error = null;
-    callback(error, response);
+        request(url, options, function(err, body){
+          error = err;
+          response[model] = body[pathForType(model)];
+
+          index++;
+          if (index === len){
+            callback(error, response);
+          }
+        });
+
+      });
+
+
+
+    }else{
+      url = buildURL(method, modelName, id, query);
+      options = requestOptions(url);
+
+      request(url, options, function(err, body){
+        var response = body[pathForType(modelName)];
+        callback(err, response);
+      });
+    }
+
+
   };
 
 
 
-  return this;
+  return self;
 };

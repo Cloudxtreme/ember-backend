@@ -1,5 +1,5 @@
 ember.adapter.host          : http://vidler.io
-ember.adapter.namespace     : /api/v1
+ember.adapter.namespace     : api/v1
 
 
 ember.route.index           : /
@@ -13,4 +13,5 @@ ember.store.post            : ["findRecord"]
 
 
 ember.route.post.edit       : /post/edit/:id
-ember.model.post.edit       : post
+ember.model.post.edit       : ["post"]
+ember.store.post.edit       : ["findRecord"]
